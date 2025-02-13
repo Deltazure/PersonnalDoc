@@ -181,68 +181,95 @@ Animal chien = AnimalFactory.CreerAnimal("Chien");
 Console.WriteLine(chien.Nom); // Affiche "Chien"
 ```
 
+### **Qu'est-ce que le pattern Observer en C# ? Donne un exemple.**
+Même principe que l'Event, l'Observer repose sur une `Interface` alors que l'Event repose sur un `delegate`.
+
+Pattern utilisé où un objet `Observable` comporte un ou une liste d'objets `Observer` pour lesquels il peut exécuter une méthode définie dans l'interface IObserver.
+
+mécanique:
+`public class Observable` comporte:
+- une `list<IObserver>` d'observateurs de portée `private` pour contenir les abonnements.
+- des méthodes publiques pour `.Add` et `.Remove` des éléments de la liste.
+- une méthode `private void blablAction(...)` qui va effectuer l'action sur l'ensemble des objets dans la liste des obervateurs.
+
+```C#
+public interface IObserver  
+{  
+    void Update(string message);  
+}  
+
+public class Observable  
+{  
+    private List<IObserver> _observers = new();  
+
+    public void AddObserver(IObserver observer) => _observers.Add(observer);  
+    public void RemoveObserver(IObserver observer) => _observers.Remove(observer);  
+
+    public void NotifyObservers(string message)  
+    {  
+        foreach (var observer in _observers)  
+            observer.Update(message);  
+    }  
+}
+```
+
+### **Qu'est-ce que le pattern Dependency Injection en C# ? Donne un exemple.**
 
 
-
-
-
-
-Qu'est-ce que le pattern Observer en C# ? Donne un exemple.
-Qu'est-ce que le pattern Dependency Injection en C# ? Donne un exemple.
-Qu'est-ce que le pattern Repository en C# ? Donne un exemple.
-Questions pratiques
-Écris une méthode en C# qui inverse une chaîne de caractères.
-Écris une méthode en C# qui vérifie si une chaîne de caractères est un palindrome.
-Écris une méthode en C# qui calcule la factorielle d'un nombre.
-Écris une méthode en C# qui trouve le nombre le plus grand dans un tableau d'entiers.
-Écris une méthode en C# qui trie un tableau d'entiers en utilisant l'algorithme de tri à bulles.
-Écris une méthode en C# qui implémente le pattern Singleton.
-Écris une méthode en C# qui utilise LINQ pour filtrer une liste d'objets.
-Écris une méthode en C# qui utilise async et await pour effectuer une requête HTTP.
-Écris une méthode en C# qui sérialise un objet en JSON.
-Écris une méthode en C# qui désérialise un objet JSON en un objet C#.
-Questions sur les concepts de programmation
-Qu'est-ce que la programmation orientée objet (POO) ? Quels sont ses principes de base ?
-Quelle est la différence entre l'encapsulation, l'héritage et le polymorphisme en POO ?
-Qu'est-ce que le polymorphisme en C# ? Donne un exemple.
-Qu'est-ce que l'encapsulation en C# ? Donne un exemple.
-Qu'est-ce que l'abstraction en C# ? Donne un exemple.
-Quelle est la différence entre une classe abstraite et une interface en C# ?
-Qu'est-ce que la composition en C# ? Donne un exemple.
-Qu'est-ce que l'agrégation en C# ? Donne un exemple.
-Qu'est-ce que le couplage et la cohésion en programmation ?
-Qu'est-ce que le principe SOLID en programmation orientée objet ?
-Questions sur les frameworks et outils
-Qu'est-ce que .NET Core et en quoi est-il différent de .NET Framework ?
-Qu'est-ce que ASP.NET Core et quels sont ses avantages ?
-Qu'est-ce que Entity Framework Core et comment est-il utilisé en C# ?
-Quelle est la différence entre Entity Framework et Dapper ?
-Qu'est-ce que le middleware en ASP.NET Core ?
-Qu'est-ce que la dépendance injectée (Dependency Injection) en ASP.NET Core ?
-Qu'est-ce que le routage (routing) en ASP.NET Core ?
-Qu'est-ce que le modèle MVC (Model-View-Controller) en ASP.NET Core ?
-Qu'est-ce que le modèle MVVM (Model-View-ViewModel) en C# ?
-Qu'est-ce que le modèle Razor Pages en ASP.NET Core ?
-Questions sur les tests
-Qu'est-ce que les tests unitaires en C# ? Donne un exemple.
-Quelle est la différence entre les tests unitaires et les tests d'intégration ?
-Qu'est-ce que le framework de test xUnit en C# ?
-Qu'est-ce que le framework de test NUnit en C# ?
-Qu'est-ce que le framework de test MSTest en C# ?
-Qu'est-ce que le mocking en C# ? Donne un exemple.
-Qu'est-ce que le framework Moq en C# ?
-Qu'est-ce que le TDD (Test-Driven Development) ?
-Qu'est-ce que le BDD (Behavior-Driven Development) ?
-Qu'est-ce que le code coverage en C# ?
-Questions sur les bonnes pratiques
-Quelles sont les bonnes pratiques pour écrire du code propre en C# ?
-Qu'est-ce que le principe DRY (Don't Repeat Yourself) en programmation ?
-Qu'est-ce que le principe KISS (Keep It Simple, Stupid) en programmation ?
-Qu'est-ce que le principe YAGNI (You Aren't Gonna Need It) en programmation ?
-Qu'est-ce que le principe SOLID en programmation orientée objet ?
-Qu'est-ce que le principe de séparation des préoccupations (Separation of Concerns) ?
-Qu'est-ce que le principe de responsabilité unique (Single Responsibility Principle) ?
-Qu'est-ce que le principe ouvert/fermé (Open/Closed Principle) ?
-Qu'est-ce que le principe de substitution de Liskov (Liskov Substitution Principle) ?
-Qu'est-ce que le principe d'inversion de dépendance (Dependency Inversion Principle) ?
+### **Qu'est-ce que le pattern Repository en C# ? Donne un exemple.**
+## Questions pratiques
+### **Écris une méthode en C# qui inverse une chaîne de caractères.**
+### **Écris une méthode en C# qui vérifie si une chaîne de caractères est un palindrome.**
+### **Écris une méthode en C# qui calcule la factorielle d'un nombre.**
+### **Écris une méthode en C# qui trouve le nombre le plus grand dans un tableau d'entiers.**
+### **Écris une méthode en C# qui trie un tableau d'entiers en utilisant l'algorithme de tri à bulles.**
+### **Écris une méthode en C# qui implémente le pattern Singleton.**
+### **Écris une méthode en C# qui utilise LINQ pour filtrer une liste d'objets.**
+### **Écris une méthode en C# qui utilise async et await pour effectuer une requête HTTP.**
+### **Écris une méthode en C# qui sérialise un objet en JSON.**
+### **Écris une méthode en C# qui désérialise un objet JSON en un objet C#.**
+### **Questions sur les concepts de programmation**
+### **Qu'est-ce que la programmation orientée objet (POO) ? Quels sont ses principes de base ?**
+### **Quelle est la différence entre l'encapsulation, l'héritage et le polymorphisme en POO ?**
+### **Qu'est-ce que le polymorphisme en C# ? Donne un exemple.**
+### **Qu'est-ce que l'encapsulation en C# ? Donne un exemple.**
+### **Qu'est-ce que l'abstraction en C# ? Donne un exemple.**
+### **Quelle est la différence entre une classe abstraite et une interface en C# ?**
+### **Qu'est-ce que la composition en C# ? Donne un exemple.**
+### **Qu'est-ce que l'agrégation en C# ? Donne un exemple.**
+### **Qu'est-ce que le couplage et la cohésion en programmation ?**
+### **Qu'est-ce que le principe SOLID en programmation orientée objet ?**
+### **Questions sur les frameworks et outils**
+### **Qu'est-ce que .NET Core et en quoi est-il différent de .NET Framework ?**
+### **Qu'est-ce que ASP.NET Core et quels sont ses avantages ?**
+### **Qu'est-ce que Entity Framework Core et comment est-il utilisé en C# ?**
+### **Quelle est la différence entre Entity Framework et Dapper ?**
+### **Qu'est-ce que le middleware en ASP.NET Core ?**
+### **Qu'est-ce que la dépendance injectée (Dependency Injection) en ASP.NET Core ?**
+### **Qu'est-ce que le routage (routing) en ASP.NET Core ?**
+### **Qu'est-ce que le modèle MVC (Model-View-Controller) en ASP.NET Core ?**
+### **Qu'est-ce que le modèle MVVM (Model-View-ViewModel) en C# ?**
+### **Qu'est-ce que le modèle Razor Pages en ASP.NET Core ?**
+### **Questions sur les tests**
+### **Qu'est-ce que les tests unitaires en C# ? Donne un exemple.**
+### **Quelle est la différence entre les tests unitaires et les tests d'intégration ?**
+### **Qu'est-ce que le framework de test xUnit en C# ?**
+### **Qu'est-ce que le framework de test NUnit en C# ?**
+### **Qu'est-ce que le framework de test MSTest en C# ?**
+### **Qu'est-ce que le mocking en C# ? Donne un exemple.**
+### **Qu'est-ce que le framework Moq en C# ?**
+### **Qu'est-ce que le TDD (Test-Driven Development) ?**
+### **Qu'est-ce que le BDD (Behavior-Driven Development) ?**
+### **Qu'est-ce que le code coverage en C# ?**
+### **Questions sur les bonnes pratiques**
+### **Quelles sont les bonnes pratiques pour écrire du code propre en C# ?**
+### **Qu'est-ce que le principe DRY (Don't Repeat Yourself) en programmation ?**
+### **Qu'est-ce que le principe KISS (Keep It Simple, Stupid) en programmation ?**
+### **Qu'est-ce que le principe YAGNI (You Aren't Gonna Need It) en programmation ?**
+### **Qu'est-ce que le principe SOLID en programmation orientée objet ?**
+### **Qu'est-ce que le principe de séparation des préoccupations (Separation of Concerns) ?**
+### **Qu'est-ce que le principe de responsabilité unique (Single Responsibility Principle) ?**
+### **Qu'est-ce que le principe ouvert/fermé (Open/Closed Principle) ?**
+### **Qu'est-ce que le principe de substitution de Liskov (Liskov Substitution Principle) ?**
+### **Qu'est-ce que le principe d'inversion de dépendance (Dependency Inversion Principle) ?**
 
