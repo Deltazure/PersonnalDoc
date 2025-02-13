@@ -3,60 +3,279 @@
 
 ## Introduction
 
-Through a list of questions and answers, we will go through the main  concetps and application of the C# language. This document is divised in sections from the most basic topics to the most advanced ones.
+Via une liste de questions réponses, nous allons aborder les principaux concepts liés au langage C#, son utilisatin et les concept de programmation utiles. Ce document est divisé en plusieurs sections qui abordent des questions de difficultés progressive.
 
 ## **Questions de base**
 ### **Qu'est-ce que le C# et quels sont ses principaux avantages ?**
 Langage fortement typé, sécurisé et compilé POO développé par Microsoft et intégré dans .NET. Possède un garbage collector, compatible Windows, web et mobile.
 
 ### **Quelle est la différence entre == et .Equals() en C# ?**
-== est un signe d’égalité utilisé dans des conditions, .Equals() et une méthode qui peut être redéfinie pour avoir un comportement modifié.
+`==` est un signe d’égalité utilisé dans des conditions, `.Equals()` et une méthode qui peut être redéfinie pour avoir un comportement modifié.
 
 ### **Qu'est-ce qu'une classe en C# ? Donne un exemple.**
-Une classe est un ensemble d’attributs et de méthodes pouvant être instanciée sous forme d’objets via un constructeurs qui peut être défini de plusieurs façons différentes. Ses composants peuvent avoir différentes portées et la notion d’héritage touche les classes.
+Une classe est un ensemble d’attributs et de méthodes pouvant être instanciée sous forme d’objets via un constructeurs qui peut être défini de plusieurs façons différentes. Ses composants peuvent avoir différentes portées.
 
 ### **Quelle est la différence entre une classe et une structure en C# ?**
-Une classe est stockée sur le tas, une structure est stockée sur la pile. Class mieux pour données complexes, struct mieux pour données simples. Classe instanciable via constructeur qui peut être vide, struc est construite lorsque toutes les données sont connues. Struct est de type valeur et donc passée par copie et non référence comme les classes.
+Une classe est stockée sur le tas, une structure est stockée sur la pile, donc non gérée par le GC sauf si elle est implémentée par une classe. Classes mieux pour données complexes, struct mieux pour données simples. Classe instanciable via constructeur qui peut être vide, struc ne peut être construite que lorsque toutes les données sont connues. Struct est de type valeur et donc passée par copie et non référence comme les classes.
 
 ### **Qu'est-ce qu'une méthode statique ? Peux-tu donner un exemple ?**
 Une méthode statique appartient à la classe et non l’instanciation de la classe.
-NomClasse.methodeStatique()
+`NomClasse.methodeStatique()`
 
 ### **Quelle est la différence entre const et readonly en C# ?**
-Const est défini lors de la compilation, readonly est défini lors de l’instanciation d’une classe. Les deux, une fois définis ne peuvent être modifiés
+Une `const` est défini lors de la compilation, un `readonly` est défini lors de l’instanciation d’une classe. Les deux, une fois définis ne peuvent être modifiés
 
 ### **Qu'est-ce qu'une propriété en C# et comment est-elle différente d'un champ ?**
-Un champs n’as pas de contrôle d’acces, une propriété (get / set) peut contrôler son accès via la définition des méthodes.
+Un champs n’as pas de contrôle d’acces, une propriété (`get` / `set`) peut contrôler son accès via la définition des méthodes.
 
 ### **Qu'est-ce qu'une interface en C# ? Donne un exemple.**
-Une interface est un contrat qui définit des méthodes qu’une classe qui l’implémente doit remplir. Ca permet le polymorphisme et une meilleur abstraction
+Une interface est un contrat qu’une classe ou structure qui l’implémente doit remplir. Ca permet le polymorphisme et une meilleur abstraction.
+
+```C#
+// Définition de l'interface
+public interface IAnimal
+{
+    void Crier();  // Méthode sans implémentation
+}
+
+// Implémentation de l'interface dans une classe
+public class Chien : IAnimal
+{
+    public void Crier()
+    {
+        Console.WriteLine("Wouf !");
+    }
+}
+
+// Implémentation dans une autre classe
+public class Chat : IAnimal
+{
+    public void Crier()
+    {
+        Console.WriteLine("Miaou !");
+    }
+}
+
+// Utilisation
+class Program
+{
+    static void Main()
+    {
+        IAnimal monChien = new Chien();
+        IAnimal monChat = new Chat();
+
+        monChien.Crier();  // Affiche "Wouf !"
+        monChat.Crier();   // Affiche "Miaou !"
+    }
+}
+```
 
 ### **Quelle est la différence entre abstract et sealed en C# ?**
-Abstract doit être surenregistré lors d’un héritage (class ou méthode).
-Classe sealed ne peut être héritée, méthode sealed ne peut être redéfinie.
+Une classe `abstract` doit être surenregistré lors d’un héritage (classe ou méthode).
+Classe `sealed` ne peut être héritée, méthode sealed ne peut être redéfinie.
+
+```C#
+abstract class Animal  
+{  
+    public abstract void Crier(); // Méthode abstraite (pas d’implémentation)
+}  
+
+class Chien : Animal  
+{  
+    public override void Crier()  // Override permet le surenregistrement
+    {  
+        Console.WriteLine("Wouf !");
+    }  
+}
+```
+
+
 
 ### **Qu'est-ce que l'héritage en C# ? Donne un exemple.**
-L’héritage permet à une classe de récupérer les méthodes et attributs d’une classe parente qu’elle implémente. Ex Parent (int a, b, methode add(int a, int b)) et child : Parent avec. Child.Add(number1, number2) c’est ok.
+L’héritage permet à une classe de récupérer l'implémentation des méthodes et attributs d’une classe parente (selon la portée des éléments). 
+
+| **Modificateur**        | **Accessible dans la classe** | **Accessible dans les classes dérivées** | **Accessible dans le même assembly** | **Accessible en dehors de l’assembly** |
+|-------------------------|-------------------------------|------------------------------------------|--------------------------------------|----------------------------------------|
+| `private`               | ✅ Oui                        | ❌ Non                                    | ❌ Non                                | ❌ Non                                  |
+| `protected`             | ✅ Oui                        | ✅ Oui                                    | ❌ Non                                | ❌ Non                                  |
+| `internal`              | ✅ Oui                        | ✅ Oui (si dans le même assembly)         | ✅ Oui                                | ❌ Non                                  |
+| `protected internal`    | ✅ Oui                        | ✅ Oui                                    | ✅ Oui                                | ❌ Non                                  |
+| `public`                | ✅ Oui                        | ✅ Oui                                    | ✅ Oui                                | ✅ Oui                                  |
+| `private protected`     | ✅ Oui                        | ✅ Oui (si dans le même assembly)         | ❌ Non                                | ❌ Non                                  |
+
+
+Exemple:
+```C#
+class Parent
+{
+    private int secret = 42;       // Non accessible en héritage
+    protected int valeur = 10;     // Accessible aux classes dérivées
+}
+
+class Enfant : Parent
+{
+    public void Afficher()
+    {
+        // Console.WriteLine(secret);  // Erreur : Non accessible
+        Console.WriteLine(valeur);    // OK : Hérité de Parent
+    }
+}
+```
+
 
 ## **Questions intermédiaires**
 
 ### **Qu'est-ce que la surcharge de méthodes (method overloading) en C# ? Donne un exemple.**
-L’overloading c’est créer une méthode X et la définir plusieurs fois avec des arguments différents. La méthode doit avoir le même nom mais des arguments différents, donc une signature différente à chaque fois.
+L’overloading c’est créer une méthode X et la définir plusieurs fois une signature différente.
+Exemple:
+```C#
+public int doAction(int a, int b) {return a + b;}
+public int doAction(int a) {return math.Sqrt(a);}
+```
 
 ### **Qu'est-ce que la surcharge d'opérateurs (operator overloading) en C# ? Donne un exemple.**
 Surcharge opérateur permet de redéfinir le comportement d’un opérateur dans le cadre d’une classe pour la manipulation d’objet.
 
+```C#
+public class Point
+{
+    public int X, Y;
+    public Point(int x, int y) { X = x; Y = y; }
+
+    // Surcharge de l'opérateur "+"
+    public static Point operator +(Point p1, Point p2) => new Point(p1.X + p2.X, p1.Y + p2.Y);
+}
+
+class Program
+{
+    static void Main()
+    {
+        Point p1 = new Point(3, 4), p2 = new Point(1, 2);
+        Point p3 = p1 + p2;  // Utilisation de l'opérateur "+" surchargé
+        Console.WriteLine($"({p3.X}, {p3.Y})");  // Affiche "(4, 6)"
+    }
+}
+```
+
 ### **Qu'est-ce que la gestion des exceptions en C# ? Comment utilises-tu try, catch, et finally ?**
-La gestion d’exception se passe via un try catch. Le code est effectué dans une bulle, le try. Si une erreur survient, elle éclate la bulle et est récupérée par le catch qui récupère la trace et est capable de la remonter / donner. Une fois le catch fait, s’il y a un finally, le code du finally sera effectué et le programme continuera. Cette gestion d’exception permet d’encapsuler des parties de code ou tout et permettre de continuer l’exécution du soft sans coupure.
+La gestion d’exceptions se passe via un `try` `catch` `finally`. Le code est exécuté dans une bulle: le `try`. Si une erreur survient, elle éclate la bulle. Le code dans le `catch` est exécuté. Le `catch` peut récupérer et rendre utilisable la nature et la trace de l'exception. Une fois le code dans le `catch` exécuté, le code du `finally` sera exécuté s'il est présent. Cette gestion d’exceptions permet de splitter le code en parties distinctes et de récupérer les status d'exécutions de chaques parties. Une levée d'exception peut ou peut ne pas être bloquante. C'est à l'utilisateur de définir son comportement.
 
 ### **Qu'est-ce qu'un délégué (delegate) en C# ? Donne un exemple.**
-Gérer un évènement : le delegate est l’eventhandler. C’est lui qui va notifier les autres objets abonnés qu’une action se produit.
-Définition delegate, définition methode1(std), methode2(delegate). Au mieux de faire method1(std), on va faire methode2(std, del action){action(std)}.
-Avoir des callback. Une méthode qui prend un delegate en argument. Lors de l’appel de la méthode on lui met soit une fonction lambda soit une autre méthode en argument pour qu’elle soit effectuée quand voulu.
-Créer une liste de méthode à faire. Comme un set de méthode à exécuter.
+Un `delegate` est un type qui permet de référencer des méthodes. Il peut être utilisé pour:
+- appeler une méthode
+- stocker une méthode dans une liste d'exécution
+
+```C#
+public delegate T RetourGenerique<T>();
+
+class Program
+{
+    static void Main()
+    {
+        RetourGenerique<int> delInt = RetournerEntier;
+        Console.WriteLine(delInt());  // Affiche 42
+
+        RetourGenerique<string> delString = RetournerTexte;
+        Console.WriteLine(delString());  // Affiche Hello World
+    }
+
+    static int RetournerEntier() => 42;
+    static string RetournerTexte() => "Hello World";
+}
+```
+On a aussi la possibilité de mettre en place des callbacks:
+
+```C# 
+using System;
+
+public delegate void CallbackDelegate(string message, bool success);
+
+class Program
+{
+    static void Main()
+    {
+        // Appel de la méthode avec un seul callback générique
+        EffectuerOperation(Callback);
+    }
+
+    // Méthode qui effectue une tâche et appelle un callback
+    static void EffectuerOperation(CallbackDelegate callback)
+    {
+        try
+        {
+            // Simuler une tâche qui prend du temps
+            Console.WriteLine("Traitement en cours...");
+            System.Threading.Thread.Sleep(2000);  // Simulation d'une pause de 2 secondes
+
+            // Si l'opération réussit
+            callback("Opération terminée avec succès.", true);
+        }
+        catch (Exception ex)
+        {
+            // En cas d'erreur, on passe le message d'erreur au callback
+            callback($"Erreur : {ex.Message}", false);
+        }
+    }
+
+    // Callback générique pour gérer succès ou erreur
+    static void Callback(string message, bool success)
+    {
+        if (success)
+        {
+            Console.WriteLine("Succès: " + message);
+        }
+        else
+        {
+            Console.WriteLine("Échec: " + message);
+        }
+    }
+}
+```
+Le multicast delegate permet de stocker plusieurs méthodes et de les exécuter en FIFO.
+Dans le cas d'un multicast, les méthodes suivantes sont utiles:
+- `.GetInvocationList()` permet de retourner un tableau de `delegate[]` chacun représentant une méthode liée.
+- `.DynamicInvoke()` permet d'appeler une méthode clibée avec les argument correspondant: 
+```C#
+invocationList[1].DynamicInvoke("Sélectionner une méthode spécifique");
+```  
  
 ### **Quelle est la différence entre un délégué et un événement en C# ?**
-Un évènement se base sur le fonctionnement d’un délégué. Un délégué est une entité capable de stocker / faire un lien vers une méthode. On peut lui ajouter des méthodes dans sa liste de fonction à exécuter. On peut invoquer un delegué pour qu’il trigger toutes les méthodes
+Un événement se base sur le fonctionnement d’un délégué, mais il existe des différences clés dans leur utilisation et leur gestion.
+
+- Délégué : Un délégué est un type de référence qui peut être associé à une ou plusieurs méthodes avec des signatures spécifiques. Il sert essentiellement de pointeur de fonction, permettant d’invoquer des méthodes dynamiquement. Un délégué peut être invoqué directement, et on peut lui ajouter ou retirer des méthodes de façon flexible à tout moment.
+
+- Événement : Un événement est un mécanisme de notification basé sur un délégué, mais avec des restrictions supplémentaires. Un événement permet à un objet de signaler qu’une action a eu lieu, et à d’autres objets (les abonnés) de réagir en conséquence. En revanche, un événement offre une sécurité supplémentaire en limitant la façon dont il peut être manipulé. Par exemple, on ne peut pas invoquer un événement directement de l'extérieur de la classe qui le déclare, ce qui protège les abonnés de manipulations indésirables.
+
+Un événement déclare un délégué, mais empêche d'ajouter ou de supprimer des méthodes en dehors de la classe définissant l'événement. On peut utiliser des méthodes add et remove pour gérer les abonnements à l'événement.
+
+```C#
+public class MyClass
+{
+    public delegate void MyDelegate(string message);
+    public event MyDelegate OnMessageReceived; // Déclaration d'un événement
+
+    public void TriggerEvent()
+    {
+        OnMessageReceived?.Invoke("Un message est reçu");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        MyClass myClass = new MyClass();
+        myClass.OnMessageReceived += MessageHandler; // Abonnement à l'événement
+
+        myClass.TriggerEvent();  // Déclenche l'événement
+    }
+
+    static void MessageHandler(string message)
+    {
+        Console.WriteLine(message);
+    }
+}
+```
 
 ### **Qu'est-ce qu'un lambda expression en C# ? Donne un exemple.**
 Fonction anonyme qui peut être définie dans le code directement. Notées (paramètre) => expression
