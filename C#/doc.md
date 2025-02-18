@@ -278,11 +278,13 @@ public class Program
 ```
 
 ### **Qu'est-ce qu'un lambda expression en C# ? Donne un exemple.**
-Fonction anonyme qui peut être définie dans le code directement. Notées (paramètre) => expression
-Genre Func<int, int> square = x => x * x ; dans le cas où l’on veut un retour
-Sinon,
-Action<int> log = x => {Console.WriteLine($”number of try: {x}”)}
-Func et Action sont basées sur des delegate.
+Fonction anonyme qui peut être définie dans le code directement. Notées (paramètre) => expression:
+
+```C#
+Func<int, int> square = x => x * x; // dans le cas où l’on veut un retour. Sinon:
+Action<int> log = x => { Console.WriteLine($”number of try: {x}”) }
+``` 
+`Func<>` et `Action<>` sont basés sur des delegate.
 
 ### **Qu'est-ce que LINQ (Language Integrated Query) en C# ? Donne un exemple.**
 Le LINQ est un ensemble de fonctionnalités C# utilisées pour requêter sur des collections de données. Utile dans un cadre où l’on traite des données (bdd, xml, SQL). Ca ressemble à du SQL d’une certaine manière.
@@ -321,14 +323,52 @@ Le LINQ utilise:
 ```
 
 ### **Quelle est la différence entre IEnumerable et IQueryable en C# ?**
-IEnum => ok pour collection locales, exécuté côté client, récupère toute la collection puis applique les filtres
+IEnumerable:
+- collection locales
+- exécuté côté client
+- récupère toute la collection puis applique les filtres
 
-IQuery => ok pour bdd, transforme la requête en SQL et ok LINQ=>SQL, permet le Lazy Loading. Ok pour Entity Framework (ORM => badd gérée via des objets).
+IQueryable:
+- pour bdd
+- transforme la requête en SQL 
+- LINQ=>SQL, permet le Lazy Loading.
+- Entity Framework (ORM => bdd gérée via des objets).
 
-Lazy Loading avec déclaration en virtual.
+pour le lazy loading, les propriétés doivent être déclarées `virtual`.
 
 ### **Qu'est-ce que la réflexion (reflection) en C# ? Donne un exemple.**
 Mécanisme qui permet de manipuler des types dynamiquement pendant l’exécution. Flexible mais coûteux en performance.
+
+Utilisation: 
+- Serialization / Deserialization dynamique
+- Inspection et manipulation des types au rutime
+- Tests unitaires et Mocking avancé
+
+```C#
+using System;
+using System.Reflection;
+
+class Program
+{
+    static void Main()
+    {
+        Type type = typeof(Person); // Obtenir le type de la classe
+        Console.WriteLine($"Nom de la classe : {type.Name}");
+
+        // Lister les propriétés de la classe
+        foreach (PropertyInfo prop in type.GetProperties())
+        {
+            Console.WriteLine($"Propriété : {prop.Name} - Type : {prop.PropertyType}");
+        }
+    }
+}
+
+class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+```
 
 ### **Qu'est-ce que la sérialisation en C# ? Donne un exemple.**
 Permet le transfert, stockage ou la communication de données. On prend un objet on le transforme en binaire, xml, Json en le sérialisant. On peut ainsi le stocker en bdd ou fichier pour ensuite le désérialiser et pouvoir accéder à cet objet.
@@ -434,61 +474,489 @@ public class Observable
 
 ### **Qu'est-ce que le pattern Dependency Injection en C# ? Donne un exemple.**
 
+Une injection de dépendance (DI) est le fait de mettre en arugment d'un constructeur des éléments tel qu'une classe ou un objet déjà existant.
+
+Cela fonctionne bien avec les services.
+Un service représente une ou un ensemble d'actions transversales et réutilisable.
+Pour le reste, métier avec état, on choisira une classe.
+Un service est une construction mentale, il n'y a pas de syntaxe spécifique en C# pour la déclarer.
 
 ### **Qu'est-ce que le pattern Repository en C# ? Donne un exemple.**
+
+Le pattern repository implémente les méthodes CRUD pour l'accès au données d'un projet. Il représente une interface à utiliser pour interagir avec les données projet et se base sur l'implémentation de la méthodo CRUD.
+
+
 ## Questions pratiques
+
 ### **Écris une méthode en C# qui inverse une chaîne de caractères.**
+
+```C#
+static char[] invertCharList(string message)
+{
+    char[] invertedCharBuffer = new char[message.Length];
+    int length = message.Length;
+
+    for (int i = 0; i < length; i++)
+    {
+        invertedCharBuffer[i] = message[length - 1 - i];  
+    }
+
+    return invertedCharBuffer;
+
+}
+```
+
+
 ### **Écris une méthode en C# qui vérifie si une chaîne de caractères est un palindrome.**
+
+```C#
+static bool palindromeCheck(string message)
+{
+    bool palindromeState = true;
+
+    for (int i = 0 ; i < message.Length / 2 ; i++)
+    {
+        if (message[i] != message[message.Length - 1 - i])
+        {
+            palindromeState = false;
+            break;
+        }
+    }
+    return palindromeState;
+}
+```
 ### **Écris une méthode en C# qui calcule la factorielle d'un nombre.**
+
+```C#
+    static int facto(int number)
+    {
+        Console.WriteLine("+");
+        int result = 1;
+        while (number > 1) 
+        {   
+            result *= number;
+            number--;
+        }
+        return result;
+    }
+```
+
+
 ### **Écris une méthode en C# qui trouve le nombre le plus grand dans un tableau d'entiers.**
+
+```C#
+    static int max(int[] numberTable)
+    {
+        int result = 0;
+
+        foreach (var item in numberTable)
+        {
+            if (item > result) result = item;
+        }
+
+        // return numberTable.Max();
+
+        return result;
+    }
+```
+
 ### **Écris une méthode en C# qui trie un tableau d'entiers en utilisant l'algorithme de tri à bulles.**
-### **Écris une méthode en C# qui implémente le pattern Singleton.**
+
+```C#
+    static int[] bubbleSort(int[] table)
+    {
+        bool change = false;
+        int length = table.Length;
+        for (int i = 0; i < table.Length - 1; i++)
+        {
+            for (int j = 0; j < length - 1; j++)
+            {
+                if (table[j] > table[j + 1])
+                {
+                    int buff = table[j];
+                    table[j] = table[j + 1];
+                    table[j + 1] = buff;
+                    change = true;
+                }
+            }
+            length--;
+
+            if (change == false) break;
+        }
+
+        return table;
+    }
+```
+
+### **Écris une classe en C# qui implémente le pattern Singleton.**
+
+```C#
+public class Singleton
+{
+    private static readonly Singleton _instance = new Singleton(); // Unique instance
+    private Singleton() { } // Empêche `new Singleton()`
+    public static Singleton Instance => _instance; // Retourne l'instance unique
+}
+```
+
 ### **Écris une méthode en C# qui utilise LINQ pour filtrer une liste d'objets.**
+
+```C#
+var items = new List<object>{12,"Apple",7,"Banana",5,"Orange", 18,"Grape",3,"Peach"};
+
+var resultsString = items.OfType<string>().ToList();
+foreach (var item in resultsString) Console.WriteLine(item);
+
+var resultsInt = items.OfType<int>().ToList();
+foreach (var item in resultsInt) Console.WriteLine(item);
+```
+
+
+
 ### **Écris une méthode en C# qui utilise async et await pour effectuer une requête HTTP.**
-### **Écris une méthode en C# qui sérialise un objet en JSON.**
-### **Écris une méthode en C# qui désérialise un objet JSON en un objet C#.**
-### **Questions sur les concepts de programmation**
+
+```C#
+    static async Task<int[]> asyncAwait(int[] table)
+    {
+        return await Task.Run(() =>  bubbleSort(table));
+    }
+```
+
+## **Questions sur les concepts de programmation**
+
+
 ### **Qu'est-ce que la programmation orientée objet (POO) ? Quels sont ses principes de base ?**
+
+La programmation objet est basée sur l'existence de classes instantiables en objet. On peut ainsi, via l'objet créé, accéder à ses champs et méthodes. De ce concept émergent 4 piliers de la POO:
+
+- Encapsulation : regrouper les données et les méthodes dans un même objet tout en masquant les détails internes.
+- Abstraction : exposer uniquement les fonctionnalités nécessaires tout en cachant les implémentations internes.
+- Héritage : permettre la création de nouvelles classes à partir d'anciennes pour réutiliser et étendre le code.
+- Polymorphisme : permettre à un objet de se comporter de différentes manières en fonction de son type.
+
+Via l'instanciation de classes, on peut accéder à ses champs et méthodes via l'objet créé. 
+
 ### **Quelle est la différence entre l'encapsulation, l'héritage et le polymorphisme en POO ?**
+
+L'encapsulation permet de regrouper les données et méthodes dans un même objet tout en masquand les détails internes.
+
+L'héritage permet à une classe de récupérer les champs et méthodes issus de la classe parent tout en implémentant de nouvelles méthodes et champs détaillés dans la classe enfant.
+
+Le polymorphisme permet à une objet de se comporter de manière différente selon son type. on a le polymorphisme par héritage, par surcharge et par interface.
+
+
 ### **Qu'est-ce que le polymorphisme en C# ? Donne un exemple.**
+
+Le polymorphisme permet de redéfinir un comportement en fonction d'éléments propres à l'objet créé.
+
+```C#
+using System;
+
+public class Animal
+{
+    public virtual void FaireDuBruit() 
+    {
+        Console.WriteLine("L'animal fait du bruit.");
+    }
+}
+
+public class Chien : Animal
+{
+    public override void FaireDuBruit() 
+    {
+        Console.WriteLine("Le chien aboie.");
+    }
+}
+
+public class Chat : Animal
+{
+    public override void FaireDuBruit() 
+    {
+        Console.WriteLine("Le chat miaule.");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Animal monChien = new Chien();
+        Animal monChat = new Chat();
+
+        monChien.FaireDuBruit();  // Affiche : "Le chien aboie."
+        monChat.FaireDuBruit();   // Affiche : "Le chat miaule."
+    }
+}
+
+```
+
 ### **Qu'est-ce que l'encapsulation en C# ? Donne un exemple.**
+
+L'encapsulation est le fait de délimiter la portée de champs ou de méthodes dans une classe:
+
+```C#
+class exemple
+{
+    public int exNumber;
+    private int _exNumber;
+
+}
+```
+
+| Modificateur           | Même classe | Classes dérivées | Même assembly | Partout |
+|------------------------|:-----------:|:----------------:|:-------------:|:-------:|
+| `private`             | ✅ Oui      | ❌ Non           | ❌ Non        | ❌ Non  |
+| `protected`           | ✅ Oui      | ✅ Oui           | ❌ Non        | ❌ Non  |
+| `internal`            | ✅ Oui      | ✅ Oui (dans le même assembly) | ✅ Oui | ❌ Non |
+| `protected internal`  | ✅ Oui      | ✅ Oui (dans le même assembly) | ✅ Oui | ❌ Non |
+| `private protected`   | ✅ Oui      | ✅ Oui (seulement dans le même assembly) | ❌ Non | ❌ Non |
+| `public`              | ✅ Oui      | ✅ Oui           | ✅ Oui        | ✅ Oui  |
+
+
+
 ### **Qu'est-ce que l'abstraction en C# ? Donne un exemple.**
+
+
+
 ### **Quelle est la différence entre une classe abstraite et une interface en C# ?**
+
+Une classe abstraite est une classe incomplète qui sert de base aux classes qui vont en hériter. 
+Cette classe abstraite va donc pouvoir définir les champs et méthodes dont les classes et méthodes hériterons.
+
+Une interface, défini la signature des méthodes et le champs que la classe qui l'implémente devra comporter. 
+
+La classe abstraite détermine le comportement des méthodes, l'interface ne défini que la signature de ces méthodes.
+
+
 ### **Qu'est-ce que la composition en C# ? Donne un exemple.**
+
+La coposition permet de créer une relation "A une" là où l'instanciation d'une classe créé une relation "est un".
+
+Exemple voiture / moteur.
+
+Au lieu d'hériter, le composition, permet à l'avoir voiture d'avoir un moteur. 
+Cela se fait via l'intégration de l'instanciation de l'objet moteur dans la classe voiture.
+
+
 ### **Qu'est-ce que l'agrégation en C# ? Donne un exemple.**
+
+Dans le même cadre que la composition, l'aggrégation se base sur l'ajout à un objet d'autres objets existants.
+
+Exemple:
+
+Dans le même cadre du couple voiture moteur, la voiture a un moteur, si la voiture disparait, son moteur aussi. Mais la voiture comporte également plusieurs conducteurs qui existent indépendemment de la voiture.
+
+
 ### **Qu'est-ce que le couplage et la cohésion en programmation ?**
+
+Le couplage, à l'inverse de la composition est une pratique visant à réduire la dépendance de classe avec d'autres classes. On va sortir l'instanciation d'objets à relation "A un" d'une classe en créant des interfaces et en faisant l'instanciation de cet objet hors de la classe contenante.
+
+La cohésion est une notion portant sur la réponsabilité d'une classe. Si sa responsabilité est limitée à son champs d'action, sa cohésion est forte. Si sa responsabilité est étendue (classe avec action spécifiques métier qui balayent plusieurs application) sa cohésion sera faible.
+
+
 ### **Qu'est-ce que le principe SOLID en programmation orientée objet ?**
-### **Questions sur les frameworks et outils**
+
+bonne pratique.
+
+- S : responsabilité unique, revient à maximiser la cohésion
+
+- O : Open Close, revient ouvrir une classe à son extension mais fermée à la modification. Une classe doit pouvoir recevoir de nouvelles méthodes et champs défini mais ne dois pas être modifiée pour enrichir son comportement.
+
+- L : substitution de liskov : on doit pouvoir utiliser une classe dérivée à la place de la mère sans que son comportant soit modifié.
+
+- I : Une interface ne doit pas forcer une classe à implémenter des classes qu'elle n'utilise pas
+
+- D : Inversion de dépendance, une classe ne doit pas dépendre d'un implémentation concrète mais d'une abstraction. revient à réduire la copmposition.
+
+
+| Principe | Explication | Objectif |
+|----------|------------|----------|
+| **S** - Single Responsibility | Une classe = Une seule responsabilité | Code clair et facile à maintenir |
+| **O** - Open/Closed | Ouvrir à l'extension, fermer à la modification | Éviter de modifier du code existant |
+| **L** - Liskov Substitution | Une sous-classe doit respecter le comportement de sa superclasse | Garantir la cohérence des classes |
+| **I** - Interface Segregation | Une classe ne doit pas être forcée d’implémenter des méthodes inutiles | Interfaces spécifiques et adaptées |
+| **D** - Dependency Inversion | Dépendre des abstractions plutôt que des implémentations concrètes | Réduire le couplage et faciliter l’évolutivité |
+
+| Principe SOLID | Composition | Agrégation | Couplage | Cohésion |
+|---------------|------------|------------|----------|----------|
+| **S** - Single Responsibility | ++ (permet de mieux séparer les responsabilités) | ++ (évite de surcharger une classe) | -- (un fort couplage complique la séparation des responsabilités) | ++ (une classe bien définie a une forte cohésion) |
+| **O** - Open/Closed | + (facilite l'extension avec des objets réutilisables) | + (permet d’ajouter des fonctionnalités via des objets associés) | -- (modifier une classe couplée brise le principe) | + (une forte cohésion facilite l'extension sans modifier l'existant) |
+| **L** - Liskov Substitution | + (permet de structurer proprement les objets substituables) | = (pas d’impact direct) | -- (un couplage fort peut empêcher la substitution correcte) | ++ (favorise des classes avec un comportement cohérent) |
+| **I** - Interface Segregation | = (pas directement lié) | = (pas directement lié) | -- (un fort couplage force l'implémentation d’interfaces non pertinentes) | ++ (évite d’avoir des classes implémentant des méthodes inutiles) |
+| **D** - Dependency Inversion | ++ (favorise l’injection de dépendances et la flexibilité) | ++ (évite la dépendance forte aux implémentations concrètes) | -- (le couplage aux implémentations concrètes viole ce principe) | + (une bonne séparation des responsabilités facilite l’inversion des dépendances) |
+
+## **Questions sur les frameworks et outils**
+
 ### **Qu'est-ce que .NET Core et en quoi est-il différent de .NET Framework ?**
+
+.Net Core est la nouvelle version open source, avec compatibilité étendue (pc, mac, linux) de .Net Framework.
+
 ### **Qu'est-ce que ASP.NET Core et quels sont ses avantages ?**
+
+ASP.Net est un framwork Web dev pas microsoft.
+ASP.Net Core est flexible et puissant et permet de créer des app web modernes et performantes.
+
 ### **Qu'est-ce que Entity Framework Core et comment est-il utilisé en C# ?**
+
+Entity Framwork Core est un ORM (object relational mapper) qui permet de gérer l'interaction entre une app et une bdd.
+
 ### **Quelle est la différence entre Entity Framework et Dapper ?**
+
+Dapper est un micro ORM, plus performant car ne comporte pas d'abstraction, il nécessite de créer ses requêtes SQL directement.
+
 ### **Qu'est-ce que le middleware en ASP.NET Core ?**
+
+composant logiciel qui intercept, manipule ou modifie les requêtes HTTP. Authentication, authorization, Error Handling, Statif file mgt, routing & CORS.
+
 ### **Qu'est-ce que la dépendance injectée (Dependency Injection) en ASP.NET Core ?**
+
+
+
 ### **Qu'est-ce que le routage (routing) en ASP.NET Core ?**
+
+
+
 ### **Qu'est-ce que le modèle MVC (Model-View-Controller) en ASP.NET Core ?**
+
+- Modèle: reflète le comportement métier
+- Vue : représente grapiquement les éléments d'intercation utilisateur
+- Controller: lie le modèle avec la vue. Gère le traitement des données pour qu'elles soient utilisables par la vue. Le controlleur n'as pas accès aux éléments de la vue
+
 ### **Qu'est-ce que le modèle MVVM (Model-View-ViewModel) en C# ?**
+
+Même principe que le MVC mais le VueModel a un accès direct aux éléments de la vue (text box, button etc)
+
 ### **Qu'est-ce que le modèle Razor Pages en ASP.NET Core ?**
-### **Questions sur les tests**
+
+Razor Page intègre la logique controlleur dans la vue directement.
+
+## **Questions sur les tests**
+
 ### **Qu'est-ce que les tests unitaires en C# ? Donne un exemple.**
+
+Un test unitaire revient à tester le comportement et la sortie d'une unité spécifique (méthode) de manière isolée pour s'assurer qu'elle fonctionne correctement.
+Cela permet de tester les interactions avec les dépendances.
+
+On utilise des mocks ou stubs pour isoler la fonction du reste de l'application.
+
 ### **Quelle est la différence entre les tests unitaires et les tests d'intégration ?**
+
+Test d'intégration test plusieurs unités ou composants du système (bdd, API, services).
+On s'assure que les composants fonctionnent bien ensemble.
+
 ### **Qu'est-ce que le framework de test xUnit en C# ?**
+
+xunit est un framework de test unitaire. Il permet de créer et d'exécuter des test automatisés pour vérifier le bon fonctionnement du code.
+
+basé sur les balises [Fact], [Theory].
+
+Simple, efficace et supporte l'injection de dépendance.
+
+```C#
+using Xunit;
+
+public class CalculatorTests
+{
+    [Fact]
+    public void Add_ReturnsCorrectSum()
+    {
+        var calculator = new Calculator();
+        var result = calculator.Add(2, 3);
+        Assert.Equal(5, result);
+    }
+}
+```
+
 ### **Qu'est-ce que le framework de test NUnit en C# ?**
+
+Comme xUnit mais plus ancien / mature, framwork de test unitaire, basé sur les `Assert.AreEqual()` ou `Assert.IsTrue()` etc..
+
+```C#
+using NUnit.Framework;
+
+[TestFixture]
+public class CalculatorTests
+{
+    [Test]
+    public void Add_ReturnsCorrectSum()
+    {
+        var calculator = new Calculator();
+        var result = calculator.Add(2, 3);
+        Assert.AreEqual(5, result);
+    }
+}
+```
+
 ### **Qu'est-ce que le framework de test MSTest en C# ?**
+
+MSTest permet de créer des test unitaires. Il est étroitement lié à visual Studio et est souvent utilisé dans des projets Microsoft.
+
 ### **Qu'est-ce que le mocking en C# ? Donne un exemple.**
+
+Le mockeing est une pratique qui vise à créer des objets factices pour simuler le comportement de dépendances externes.
+
 ### **Qu'est-ce que le framework Moq en C# ?**
+
+c'est une librairie permettant le mocking pour .Net.
+
 ### **Qu'est-ce que le TDD (Test-Driven Development) ?**
+
+c'est un design pattern qui vise à créer les tests pour les fonctionnalités souhaitées avant de les développer.
+3 étapes:
+- Ecrire le test
+- Ecrire le code & faire le test
+- Refactorer le code si nécessaire
+
 ### **Qu'est-ce que le BDD (Behavior-Driven Development) ?**
+
+design pattern qui prend en compte, avant tout, le comportement de fonctionnalités prévues. Leur description doit être faite selon le GWT (given, when, then). Il favorise la collaboration métier (dev, testeur, resp métier) et mets en avant l'automatisation des tests.
+
 ### **Qu'est-ce que le code coverage en C# ?**
-### **Questions sur les bonnes pratiques**
+
+Le code coverage représente la partie du code couverte par les tests automatisés.
+
+## **Questions sur les bonnes pratiques**
+
 ### **Quelles sont les bonnes pratiques pour écrire du code propre en C# ?**
+
+- Utiliser des noms explicits et significatifs
+- Respecter les convention de nommage
+- Eviter les méthodes longues
+- Utiliser l'injection de dépendance (faible couplage - injecter un service via le ctor vs inst dans la classe)
+- Eviter les répétition, DRY
+- Limiter la complexité dans le code
+- Commenter mais pas de surcharge
+- Gérer les exceptions
+- Utiliser les test autom
+
 ### **Qu'est-ce que le principe DRY (Don't Repeat Yourself) en programmation ?**
+
+Eviter la définitions d'élements qui se répettent, privilégier leur isolement pour utilisation multiple.
+
 ### **Qu'est-ce que le principe KISS (Keep It Simple, Stupid) en programmation ?**
+
+Ne pas complexifier les méthodes, fonctionnement. 
+
 ### **Qu'est-ce que le principe YAGNI (You Aren't Gonna Need It) en programmation ?**
-### **Qu'est-ce que le principe SOLID en programmation orientée objet ?**
+
+Ajouter les méthodes et fonctionnalités lorsqu'elles sont nécessaires, pas uniquement de base.
+
 ### **Qu'est-ce que le principe de séparation des préoccupations (Separation of Concerns) ?**
+
+séparation du code en zone / modules spécifique. Augmentation de la cohésion.
+
 ### **Qu'est-ce que le principe de responsabilité unique (Single Responsibility Principle) ?**
+
+le principe de responsabilité unique est le fait d'assigner un objectif fonctionnel à une classe.
+
 ### **Qu'est-ce que le principe ouvert/fermé (Open/Closed Principle) ?**
+
+ouvert à l'enrichissement d'une classe mais fermé à la modification de l'existant. (evite la régression)
+
 ### **Qu'est-ce que le principe de substitution de Liskov (Liskov Substitution Principle) ?**
+
+Les éléments de la classe parente ne doivent pas être modifié dans les classes héritantes.
+
 ### **Qu'est-ce que le principe d'inversion de dépendance (Dependency Inversion Principle) ?**
 
+Une classe ne doit pas dépendre d'objets directement mais via des abstractions.
