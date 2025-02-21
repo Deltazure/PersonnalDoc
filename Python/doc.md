@@ -132,12 +132,54 @@ except MonException as e:
 ```
 
 17. Que fait le bloc `finally` dans un `try-except` ?  
+
+Le code dans un block `finally` sera exécuté quoi qu'il arrive, c'est à dire en sortie du `try` soit naturellement, soit via l'`except`.
+
 18. Quelle est la différence entre `assert` et `raise` ?  
+
+Ces deux éléments permettent de gérer des erreurs.
+`assert` permet de vérifier une condition qiu doit être vraie. Si la condition est fasse une exception `AssertionError` est levée.
+`raise` permet de lever une exception spécifique prédéfinie, donc personnalisable.
+
+
 19. Peut-on capturer plusieurs exceptions dans un seul `except` ?  
-20. Quelle est la meilleure pratique pour attraper des exceptions spécifiques ?  
+
+Oui.
+
+```python
+try:
+    x = int(input("Entrez un nombre : "))
+    result = 10 / x
+# --------------------------------------------
+except ZeroDivisionError:
+    print("Erreur : Division par zéro.")
+except ValueError:
+    print("Erreur : Entrée invalide.")
+# ou
+except (ZeroDivisionError, ValueError) as e:
+    print(f"Erreur capturée : {e}")
+# --------------------------------------------
+else:
+    print(f"Résultat : {result}")  # Exécuté uniquement si tout va bien
+finally:
+    print("Fin du programme.")  # Toujours exécuté
+```
+
+20. Quelle est la meilleure pratique pour attraper des exceptions spécifiques ?
+
+Pour attraper des exceptions spécifiques la meilleure pratique reviendrai à:
+- ne pas utiliser le générique `except Exception`.
+- avoir un bloc `except` pour tous les types d'exceptions.
+- toujours inclure un `finally` pour la libération des ressources.
+- ajouter un `else` en cas de non erreur.
 
 ## Programmation Orientée Objet (OOP)  
-21. Quelle est la différence entre `@staticmethod` et `@classmethod` ?  
+21. Quelle est la différence entre `@staticmethod` et `@classmethod` ?
+
+- `@staticmethod` ne dépend ni de l'instace self ni de la classe cls
+- `@classmethod` recoit la classe (cls) en argument et peut modifier les attributs de classe.
+- Les deux peuvent être appelé via la classe ou une instance.
+
 22. Comment hériter d'une classe en Python ?  
 23. Qu’est-ce que le `self` dans une classe Python ?  
 24. Comment définir un attribut privé dans une classe ?  
